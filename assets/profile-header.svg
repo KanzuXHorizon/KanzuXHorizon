@@ -31,11 +31,12 @@
       <rect width="1200" height="360" rx="24"/>
     </clipPath>
     <style>
-      .eyebrow { font: 600 14px Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; letter-spacing: 3px; }
-      .name { font: 700 54px Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; letter-spacing: -1.5px; }
-      .role { font: 500 22px Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; letter-spacing: 0.2px; }
-      .tagline { font: 400 16px Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
-      .pill-label { font: 650 10px Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; letter-spacing: 1.05px; }
+      .eyebrow { font: 650 15px Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; letter-spacing: 2.8px; }
+      .name { font: 720 56px Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; letter-spacing: -1.6px; }
+      .role { font: 520 23px Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; letter-spacing: 0.15px; }
+      .tagline { font: 430 17px Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
+      .pill-label { font: 680 11px Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; letter-spacing: .92px; }
+      .orbit-label { font: 650 11px Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; letter-spacing: 1.7px; }
       .monogram { font: 700 84px Georgia, "Times New Roman", serif; }
       .fade-1 { animation: settle 900ms cubic-bezier(.22,.8,.25,1) both; }
       .fade-2 { animation: settle 900ms 130ms cubic-bezier(.22,.8,.25,1) both; }
@@ -89,7 +90,7 @@
 
     <text x="58" y="151" fill="#f5f7ff" class="name fade-2">NGUYỄN THÁI HẢO</text>
     <text x="60" y="196" fill="#b8c6e6" class="role fade-3">Software Engineer · AI Systems · Developer Tooling</text>
-    <text x="60" y="237" fill="#8797b9" class="tagline fade-4">Designing practical systems with product intent and engineering evidence.</text>
+    <text x="60" y="237" fill="#9aa9c8" class="tagline fade-4">Building reliable AI-assisted products from system design to production.</text>
 
     <rect x="59" y="271" width="420" height="2" rx="1" fill="#ffffff" fill-opacity="0.10"/>
     <g class="sweep">
@@ -124,6 +125,7 @@
       <path d="M951 203c20-5 41-5 68 0" fill="none" stroke="#a8b8e8" stroke-opacity="0.34" stroke-width="1.5" stroke-linecap="round"/>
       <text x="985" y="171" text-anchor="middle" dominant-baseline="central" fill="#f4f6ff" class="monogram">H</text>
     </g>
+    <text x="985" y="268" text-anchor="middle" fill="#8798bb" class="orbit-label fade-4">AI · BACKEND · DX</text>
 
     <path d="M760 318C905 288 1030 292 1200 236" fill="none" stroke="url(#accent)" stroke-opacity="0.18" stroke-width="1.5"/>
     <path d="M820 332C965 306 1085 300 1200 266" fill="none" stroke="#ffffff" stroke-opacity="0.08"/>

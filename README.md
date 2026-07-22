@@ -18,23 +18,39 @@
   <strong>AI-assisted products · Backend systems · Developer tooling · Engineering automation</strong>
 </p>
 
-## <img src="./assets/icons/profile.svg" width="22" height="22" align="absmiddle" alt="" /> Profile
+<p align="center">
+  <a href="#engineering-focus">Focus</a> ·
+  <a href="#selected-work">Selected work</a> ·
+  <a href="#engineering-toolkit">Toolkit</a> ·
+  <a href="#engineering-snapshot">Snapshot</a> ·
+  <a href="#connect">Connect</a>
+</p>
 
-I am **Nguyễn Thái Hảo** — also known as **KanzuWakazaki** — a software engineer based in Vietnam. I design and build AI-assisted platforms, backend services, interactive developer experiences, and full-stack products from early architecture through production delivery.
+<a id="engineering-focus"></a>
+
+## <img src="./assets/icons/profile.svg" width="22" height="22" align="absmiddle" alt="" /> Engineering focus
+
+I am **Nguyễn Thái Hảo** — also known as **KanzuWakazaki** — a software engineer based in Vietnam. I take products from system boundaries and data flow through implementation, verification, and production delivery.
 
 <table>
   <tr>
-    <td width="33%" valign="top">
-      <img src="./assets/icons/systems.svg" width="17" height="17" align="absmiddle" alt="" /> <strong>Systems</strong><br /><br />
+    <td width="50%" valign="top">
+      <img src="./assets/icons/ai.svg" width="17" height="17" align="absmiddle" alt="" /> <strong>AI-assisted systems</strong><br /><br />
+      Agent orchestration, deterministic guardrails, explicit fallback, validation, and human-reviewable outcomes.
+    </td>
+    <td width="50%" valign="top">
+      <img src="./assets/icons/systems.svg" width="17" height="17" align="absmiddle" alt="" /> <strong>Backend platforms</strong><br /><br />
       APIs, service boundaries, data flows, reliability, security, and operational visibility.
     </td>
-    <td width="33%" valign="top">
-      <img src="./assets/icons/product.svg" width="17" height="17" align="absmiddle" alt="" /> <strong>Product</strong><br /><br />
+  </tr>
+  <tr>
+    <td width="50%" valign="top">
+      <img src="./assets/icons/product.svg" width="17" height="17" align="absmiddle" alt="" /> <strong>Product engineering</strong><br /><br />
       Usable interfaces, accessible workflows, measurable outcomes, and maintainable implementation.
     </td>
-    <td width="34%" valign="top">
-      <img src="./assets/icons/delivery.svg" width="17" height="17" align="absmiddle" alt="" /> <strong>Delivery</strong><br /><br />
-      Reproducible environments, focused tests, CI/CD, reviewable automation, and clear documentation.
+    <td width="50%" valign="top">
+      <img src="./assets/icons/delivery.svg" width="17" height="17" align="absmiddle" alt="" /> <strong>Delivery &amp; developer experience</strong><br /><br />
+      Reproducible environments, focused tests, CI/CD, reviewable automation, and documentation that survives handoff.
     </td>
   </tr>
 </table>
@@ -47,13 +63,15 @@ I am **Nguyễn Thái Hảo** — also known as **KanzuWakazaki** — a software
   <img alt="Automation" src="https://img.shields.io/badge/Automation_%26_CI%2FCD-202938?style=flat-square&logo=githubactions&logoColor=white" />
 </p>
 
+<a id="selected-work"></a>
+
 ## <img src="./assets/icons/projects.svg" width="22" height="22" align="absmiddle" alt="" /> Selected work
 
 <table>
   <tr>
     <td width="50%" valign="top">
       <h3><a href="https://profile.hzi.io.vn/">Technical Portfolio <img src="./assets/icons/external-link.svg" width="14" height="14" alt="" /></a></h3>
-      <p>Engineering case studies presented with ownership, architecture, constraints, verification evidence, and outcomes.</p>
+      <p>Production case studies with clear ownership, architecture, constraints, verification evidence, and outcomes.</p>
       <p>
         <img alt="Production" src="https://img.shields.io/badge/Production-Live-25635b?style=flat-square" />
         <img alt="Bilingual" src="https://img.shields.io/badge/EN_%2F_VI-Bilingual-455c91?style=flat-square" />
@@ -63,7 +81,7 @@ I am **Nguyễn Thái Hảo** — also known as **KanzuWakazaki** — a software
     </td>
     <td width="50%" valign="top">
       <h3><a href="https://github.com/KanzuXHorizon/HRS-code-public">Workforce Intelligence Platform <img src="./assets/icons/external-link.svg" width="14" height="14" alt="" /></a></h3>
-      <p>AI-assisted workforce operations spanning attendance, biometric verification, browser signals, agent orchestration, and an operations command center.</p>
+      <p>Workforce intelligence spanning attendance, biometric and browser verification, agent orchestration, and command-center operations.</p>
       <p>
         <img alt="HRS stars" src="https://img.shields.io/github/stars/KanzuXHorizon/HRS-code-public?style=flat-square&label=Stars&color=455c91" />
         <img alt="HRS forks" src="https://img.shields.io/github/forks/KanzuXHorizon/HRS-code-public?style=flat-square&label=Forks&color=455c91" />
@@ -75,7 +93,7 @@ I am **Nguyễn Thái Hảo** — also known as **KanzuWakazaki** — a software
   <tr>
     <td width="50%" valign="top">
       <h3><a href="https://github.com/KanzuXHorizon/folderverse-3d">Folderverse 3D <img src="./assets/icons/external-link.svg" width="14" height="14" alt="" /></a></h3>
-      <p>A GPU-accelerated 3D file-system explorer with scalable layouts, clustering, level of detail, search, previews, and keyboard navigation.</p>
+      <p>A GPU-accelerated 3D file-system explorer for 10k+ nodes with clustering, level of detail, search, previews, and keyboard navigation.</p>
       <p>
         <img alt="Folderverse stars" src="https://img.shields.io/github/stars/KanzuXHorizon/folderverse-3d?style=flat-square&label=Stars&color=455c91" />
         <img alt="Folderverse forks" src="https://img.shields.io/github/forks/KanzuXHorizon/folderverse-3d?style=flat-square&label=Forks&color=455c91" />
@@ -85,7 +103,7 @@ I am **Nguyễn Thái Hảo** — also known as **KanzuWakazaki** — a software
     </td>
     <td width="50%" valign="top">
       <h3><a href="https://github.com/KanzuXHorizon/Fca-Horizon-Remastered">FCA Horizon Remastered <img src="./assets/icons/external-link.svg" width="14" height="14" alt="" /></a></h3>
-      <p>An early Messenger automation API preserved as a transparent legacy case study, including its community impact and end-of-maintenance decision.</p>
+      <p>A legacy Messenger automation API case study covering open-source adoption, maintenance trade-offs, and transparent archival.</p>
       <p>
         <img alt="FCA stars" src="https://img.shields.io/github/stars/KanzuXHorizon/Fca-Horizon-Remastered?style=flat-square&label=Stars&color=455c91" />
         <img alt="FCA forks" src="https://img.shields.io/github/forks/KanzuXHorizon/Fca-Horizon-Remastered?style=flat-square&label=Forks&color=455c91" />
@@ -95,6 +113,8 @@ I am **Nguyễn Thái Hảo** — also known as **KanzuWakazaki** — a software
     </td>
   </tr>
 </table>
+
+<a id="engineering-toolkit"></a>
 
 ## <img src="./assets/icons/toolkit.svg" width="22" height="22" align="absmiddle" alt="" /> Engineering toolkit
 
@@ -129,10 +149,15 @@ I am **Nguyễn Thái Hảo** — also known as **KanzuWakazaki** — a software
   </tr>
 </table>
 
+<a id="engineering-snapshot"></a>
+
 ## <img src="./assets/icons/metrics.svg" width="22" height="22" align="absmiddle" alt="" /> Engineering snapshot
 
 <div align="center">
-  <img src="./assets/profile-metrics.svg" width="100%" alt="Automatically refreshed GitHub engineering metrics, contribution rhythm, technology mix, and featured public work" />
+  <picture>
+    <source media="(max-width: 600px)" srcset="./assets/profile-metrics-mobile.svg" />
+    <img src="./assets/profile-metrics.svg" width="100%" alt="Automatically refreshed GitHub engineering metrics, contribution rhythm, technology mix, and featured public work" />
+  </picture>
 </div>
 
 <sub>Generated in this repository from the GitHub GraphQL API. Private activity is represented only by GitHub's aggregate contribution count; private repository names and details are never rendered.</sub>
@@ -141,10 +166,12 @@ I am **Nguyễn Thái Hảo** — also known as **KanzuWakazaki** — a software
 
 <table>
   <tr>
-    <td width="25%" valign="top"><strong>01 · Architecture</strong><br /><br />Clear boundaries, data flow, failure modes, and operational constraints before complexity.</td>
-    <td width="25%" valign="top"><strong>02 · AI integration</strong><br /><br />Validation, guardrails, deterministic policy, explicit fallback, and human-reviewable outcomes.</td>
-    <td width="25%" valign="top"><strong>03 · Quality</strong><br /><br />Focused tests, observable acceptance criteria, accessibility checks, and reproducible verification.</td>
-    <td width="25%" valign="top"><strong>04 · Delivery</strong><br /><br />Least privilege, secret hygiene, reversible automation, and documentation that survives handoff.</td>
+    <td width="50%" valign="top"><strong>01 · Architecture</strong><br /><br />Clear boundaries, data flow, failure modes, and operational constraints before complexity.</td>
+    <td width="50%" valign="top"><strong>02 · AI integration</strong><br /><br />Validation, guardrails, deterministic policy, explicit fallback, and human-reviewable outcomes.</td>
+  </tr>
+  <tr>
+    <td width="50%" valign="top"><strong>03 · Quality</strong><br /><br />Focused tests, observable acceptance criteria, accessibility checks, and reproducible verification.</td>
+    <td width="50%" valign="top"><strong>04 · Delivery</strong><br /><br />Least privilege, secret hygiene, reversible automation, and documentation that survives handoff.</td>
   </tr>
 </table>
 
@@ -170,6 +197,8 @@ I am **Nguyễn Thái Hảo** — also known as **KanzuWakazaki** — a software
 - Third-party actions are pinned to immutable commit SHAs and use scoped repository permissions.
 
 </details>
+
+<a id="connect"></a>
 
 ## <img src="./assets/icons/connect.svg" width="22" height="22" align="absmiddle" alt="" /> Connect
 

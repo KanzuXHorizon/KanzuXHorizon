@@ -10,6 +10,10 @@ const username =
 const outputPath = resolve(
   process.env.PROFILE_METRICS_OUTPUT || "assets/profile-metrics.svg",
 );
+const mobileOutputPath = resolve(
+  process.env.PROFILE_METRICS_MOBILE_OUTPUT ||
+    "assets/profile-metrics-mobile.svg",
+);
 const now = new Date();
 const to = now.toISOString();
 const fromDate = new Date(now);
@@ -266,11 +270,11 @@ const statCards = [
   .map(([label, value, detail, note], index) => {
     const x = 42 + index * 280;
     return `<g class="reveal card-${index + 1}" transform="translate(${x} 78)">
-      <rect width="264" height="112" rx="17" fill="#fff" fill-opacity=".035" stroke="#dbe5ff" stroke-opacity=".11"/>
+      <rect width="264" height="118" rx="17" fill="#fff" fill-opacity=".035" stroke="#dbe5ff" stroke-opacity=".11"/>
       <text x="18" y="28" class="metric-label">${escapeXml(label)}</text>
-      <text x="18" y="66" class="metric-value">${escapeXml(value)}</text>
-      <text x="18" y="88" class="metric-detail">${escapeXml(detail)}</text>
-      <text x="246" y="88" text-anchor="end" class="metric-note">${escapeXml(note)}</text>
+      <text x="18" y="64" class="metric-value">${escapeXml(value)}</text>
+      <text x="18" y="87" class="metric-detail">${escapeXml(detail)}</text>
+      <text x="246" y="103" text-anchor="end" class="metric-note">${escapeXml(note)}</text>
     </g>`;
   })
   .join("");
@@ -316,7 +320,7 @@ const languageBars = topLanguages
   .map((language, index) => {
     const y = 275 + index * 39;
     const percentage = (language.size / languageSizeTotal) * 100;
-    const width = Math.max(12, (percentage / 100) * 250);
+    const width = Math.max(12, (percentage / 100) * 312);
     return `<g transform="translate(798 ${y})">
       <circle cx="4" cy="-4" r="4" fill="${escapeXml(language.color)}"/>
       <text x="18" y="0" class="language-name">${escapeXml(language.name)}</text>
@@ -334,13 +338,13 @@ const featuredCards = featuredRepositories
     const languageColor = repository.primaryLanguage?.color || "#94a3b8";
     const status = repository.isArchived ? "ARCHIVED CASE STUDY" : "PUBLIC SOURCE";
     return `<g class="reveal project-${index + 1}" transform="translate(${x} 493)">
-      <rect width="356" height="112" rx="17" fill="#fff" fill-opacity=".028" stroke="#dbe5ff" stroke-opacity=".10"/>
+      <rect width="356" height="120" rx="17" fill="#fff" fill-opacity=".028" stroke="#dbe5ff" stroke-opacity=".10"/>
       <circle cx="20" cy="25" r="5" fill="${escapeXml(languageColor)}"/>
       <text x="34" y="30" class="repo-name">${escapeXml(truncate(repository.name))}</text>
       <text x="336" y="29" text-anchor="end" class="repo-status">${escapeXml(status)}</text>
-      <text x="20" y="61" class="repo-impact">★ ${formatNumber(repository.stargazerCount)}  ·  forks ${formatNumber(repository.forkCount)}  ·  ${escapeXml(language)}</text>
-      <text x="20" y="88" class="repo-updated">Last public update ${escapeXml(formatShortDate(new Date(repository.pushedAt)))}</text>
-      <path d="M20 99H336" stroke="#dbe5ff" stroke-opacity=".08"/>
+      <text x="20" y="63" class="repo-impact">★ ${formatNumber(repository.stargazerCount)}  ·  forks ${formatNumber(repository.forkCount)}  ·  ${escapeXml(language)}</text>
+      <text x="20" y="91" class="repo-updated">Last public update ${escapeXml(formatShortDate(new Date(repository.pushedAt)))}</text>
+      <path d="M20 105H336" stroke="#dbe5ff" stroke-opacity=".08"/>
     </g>`;
   })
   .join("");
@@ -387,7 +391,7 @@ const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="760" v
   <radialGradient id="glow" cx="50%" cy="50%" r="50%"><stop stop-color="#8da5f2" stop-opacity=".12"/><stop offset="1" stop-color="#8da5f2" stop-opacity="0"/></radialGradient>
   <clipPath id="frame"><rect width="1200" height="760" rx="22"/></clipPath>
   <style>
-    text{font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}.heading{fill:#f5f7ff;font-size:22px;font-weight:650}.updated{fill:#7586a8;font-size:11px}.metric-label,.section-label{fill:#91a0bf;font-size:10px;font-weight:650;letter-spacing:1.25px}.metric-value{fill:#f5f7ff;font-size:28px;font-weight:700}.metric-detail{fill:#8999b9;font-size:10.5px}.metric-note{fill:#667694;font-size:9.5px}.month-label,.axis-label{fill:#657594;font-size:9px}.panel-note{fill:#71809d;font-size:10px}.language-name{fill:#d9e2f7;font-size:11px;font-weight:650}.language-share{fill:#8797b7;font-size:10px}.repo-name{fill:#e8edfb;font-size:13px;font-weight:650}.repo-status{fill:#7484a3;font-size:8.5px;font-weight:650;letter-spacing:.8px}.repo-impact{fill:#9aa9c6;font-size:11px}.repo-updated{fill:#697997;font-size:10px}.current-name{fill:#edf2ff;font-size:15px;font-weight:700}.current-detail{fill:#8f9fbd;font-size:11px}.current-sha{fill:#70809e;font-size:10px;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}.footer{fill:#62718e;font-size:10px}.reveal{opacity:1;animation:reveal .65s ease both}.card-1{animation-delay:40ms}.card-2{animation-delay:100ms}.card-3{animation-delay:160ms}.card-4{animation-delay:220ms}.project-1{animation-delay:260ms}.project-2{animation-delay:320ms}.project-3{animation-delay:380ms}.accent-line{animation:breathe 4.8s ease-in-out infinite}.heat-peak{animation:peak 3.2s ease-in-out infinite}.activity-dot{animation:activityPulse 2.8s ease-in-out infinite}@keyframes reveal{from{opacity:.84}to{opacity:1}}@keyframes breathe{0%,100%{opacity:.42}50%{opacity:.88}}@keyframes peak{0%,100%{opacity:.82}50%{opacity:1}}@keyframes activityPulse{0%,100%{opacity:.62}50%{opacity:1}}@media(prefers-reduced-motion:reduce){.reveal,.accent-line,.heat-peak,.activity-dot{animation:none!important;opacity:1}}
+    text{font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}.heading{fill:#f5f7ff;font-size:24px;font-weight:680}.updated{fill:#8393b2;font-size:11.5px}.metric-label,.section-label{fill:#9aa9c6;font-size:11px;font-weight:680;letter-spacing:1.15px}.metric-value{fill:#f5f7ff;font-size:29px;font-weight:720}.metric-detail{fill:#98a8c5;font-size:11.5px}.metric-note{fill:#7687a6;font-size:10.5px}.month-label,.axis-label{fill:#7787a5;font-size:10px}.panel-note{fill:#8191ae;font-size:11px}.language-name{fill:#dfe7f8;font-size:12px;font-weight:680}.language-share{fill:#96a6c4;font-size:11px}.repo-name{fill:#edf2ff;font-size:14.5px;font-weight:680}.repo-status{fill:#8797b5;font-size:9.5px;font-weight:680;letter-spacing:.72px}.repo-impact{fill:#aab7cf;font-size:12px}.repo-updated{fill:#8090ad;font-size:11px}.current-name{fill:#f1f5ff;font-size:16px;font-weight:720}.current-detail{fill:#a0aec8;font-size:12px}.current-sha{fill:#8191ae;font-size:11px;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}.footer{fill:#7484a2;font-size:11px}.reveal{opacity:1;animation:reveal .65s ease both}.card-1{animation-delay:40ms}.card-2{animation-delay:100ms}.card-3{animation-delay:160ms}.card-4{animation-delay:220ms}.project-1{animation-delay:260ms}.project-2{animation-delay:320ms}.project-3{animation-delay:380ms}.accent-line{animation:breathe 4.8s ease-in-out infinite}.heat-peak{animation:peak 3.2s ease-in-out infinite}.activity-dot{animation:activityPulse 2.8s ease-in-out infinite}@keyframes reveal{from{opacity:.84}to{opacity:1}}@keyframes breathe{0%,100%{opacity:.42}50%{opacity:.88}}@keyframes peak{0%,100%{opacity:.82}50%{opacity:1}}@keyframes activityPulse{0%,100%{opacity:.62}50%{opacity:1}}@media(prefers-reduced-motion:reduce){.reveal,.accent-line,.heat-peak,.activity-dot{animation:none!important;opacity:1}}
   </style>
 </defs>
 <g clip-path="url(#frame)">
@@ -438,6 +442,163 @@ const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="760" v
 </g>
 </svg>\n`;
 
-await mkdir(dirname(outputPath), { recursive: true });
-await writeFile(outputPath, svg, "utf8");
-console.log(`Updated ${outputPath} for ${username}.`);
+const mobileStatCards = [
+  [
+    "CONTRIBUTIONS",
+    formatNumber(metrics.contributions),
+    `${formatNumber(metrics.privateContributions)} private aggregate`,
+  ],
+  [
+    "ACTIVE DAYS",
+    formatNumber(metrics.activeDays),
+    `${formatNumber(metrics.commits)} commit contributions`,
+  ],
+  [
+    "LONGEST STREAK",
+    `${formatNumber(metrics.longestStreak)} days`,
+    metrics.busiestDay
+      ? `Best ${formatMonthDay(new Date(`${metrics.busiestDay.date}T00:00:00Z`))} · ${formatNumber(metrics.busiestDay.contributionCount)} contributions`
+      : "No activity recorded",
+  ],
+  [
+    "REPOSITORIES",
+    `${formatNumber(metrics.publicRepositories + metrics.privateRepositories)} total`,
+    `${formatNumber(metrics.publicRepositories)} public · ${formatNumber(metrics.privateRepositories)} private`,
+  ],
+]
+  .map(([label, value, detail], index) => {
+    const x = 18 + (index % 2) * 196;
+    const y = 66 + Math.floor(index / 2) * 112;
+    return `<g transform="translate(${x} ${y})">
+      <rect width="188" height="104" rx="15" fill="#fff" fill-opacity=".035" stroke="#dbe5ff" stroke-opacity=".11"/>
+      <text x="14" y="24" class="mobile-label">${escapeXml(label)}</text>
+      <text x="14" y="57" class="mobile-value">${escapeXml(value)}</text>
+      <text x="14" y="82" class="mobile-detail">${escapeXml(detail)}</text>
+    </g>`;
+  })
+  .join("");
+
+const mobileHeatmap = weeks
+  .map((week, weekIndex) =>
+    (week.contributionDays || [])
+      .map((day) => {
+        const x = 40 + weekIndex * 6.45;
+        const y = 365 + day.weekday * 6.45;
+        const level = heatLevel(day.contributionCount);
+        return `<rect x="${x.toFixed(1)}" y="${y.toFixed(1)}" width="5.2" height="5.2" rx="1.3" fill="${heatColors[level]}"/>`;
+      })
+      .join(""),
+  )
+  .join("");
+
+const mobileMonthLabels = [];
+let mobilePreviousMonth = null;
+for (let weekIndex = 0; weekIndex < weeks.length; weekIndex += 1) {
+  const firstDay = weeks[weekIndex]?.contributionDays?.[0];
+  if (!firstDay) continue;
+  const date = new Date(`${firstDay.date}T00:00:00Z`);
+  const month = date.getUTCMonth();
+  if (month === mobilePreviousMonth) continue;
+  mobilePreviousMonth = month;
+  mobileMonthLabels.push(
+    `<text x="${(40 + weekIndex * 6.45).toFixed(1)}" y="350" class="mobile-month">${escapeXml(
+      new Intl.DateTimeFormat("en-US", {
+        month: "short",
+        timeZone: "UTC",
+      }).format(date),
+    )}</text>`,
+  );
+}
+
+const mobileLanguageBars = topLanguages
+  .map((language, index) => {
+    const y = 526 + index * 38;
+    const percentage = (language.size / languageSizeTotal) * 100;
+    const width = Math.max(10, (percentage / 100) * 344);
+    return `<g>
+      <circle cx="38" cy="${y - 4}" r="3.5" fill="${escapeXml(language.color)}"/>
+      <text x="49" y="${y}" class="mobile-language">${escapeXml(language.name)}</text>
+      <text x="382" y="${y}" text-anchor="end" class="mobile-share">${formatNumber(percentage, 1)}%</text>
+      <rect x="38" y="${y + 11}" width="344" height="5" rx="2.5" fill="#fff" fill-opacity=".055"/>
+      <rect x="38" y="${y + 11}" width="${width.toFixed(1)}" height="5" rx="2.5" fill="${escapeXml(language.color)}" fill-opacity=".9"/>
+    </g>`;
+  })
+  .join("");
+
+const mobileCurrentWork = currentPublicRepository
+  ? `<rect x="18" y="735" width="384" height="82" rx="15" fill="#fff" fill-opacity=".028" stroke="#dbe5ff" stroke-opacity=".10"/>
+  <text x="34" y="760" class="mobile-section">LATEST PUBLIC ACTIVITY</text>
+  <circle cx="38" cy="786" r="4" fill="${escapeXml(currentPublicRepository.primaryLanguage?.color || "#94a3b8")}"/>
+  <text x="50" y="790" class="mobile-current">${escapeXml(truncate(currentPublicRepository.name, 24))}</text>
+  <text x="386" y="790" text-anchor="end" class="mobile-detail">${formatNumber(currentTarget?.history?.totalCount || 0)} commits · ${escapeXml(formatRelativeAge(currentTarget?.committedDate || currentPublicRepository.pushedAt))}</text>
+  <text x="34" y="806" class="mobile-meta">Last commit ${escapeXml(formatDate(new Date(currentTarget?.committedDate || currentPublicRepository.pushedAt)))} · ${escapeXml((currentTarget?.oid || "").slice(0, 7))}</text>`
+  : "";
+
+const mobileFeaturedCards = featuredRepositories
+  .map((repository, index) => {
+    const y = 866 + index * 88;
+    const language = repository.primaryLanguage?.name || "Mixed stack";
+    const languageColor = repository.primaryLanguage?.color || "#94a3b8";
+    const status = repository.isArchived ? "ARCHIVED" : "PUBLIC SOURCE";
+    return `<g transform="translate(18 ${y})">
+      <rect width="384" height="80" rx="15" fill="#fff" fill-opacity=".028" stroke="#dbe5ff" stroke-opacity=".10"/>
+      <circle cx="18" cy="23" r="4" fill="${escapeXml(languageColor)}"/>
+      <text x="31" y="28" class="mobile-repo">${escapeXml(truncate(repository.name, 26))}</text>
+      <text x="366" y="27" text-anchor="end" class="mobile-status">${escapeXml(status)}</text>
+      <text x="18" y="52" class="mobile-impact">★ ${formatNumber(repository.stargazerCount)} · forks ${formatNumber(repository.forkCount)} · ${escapeXml(language)}</text>
+      <text x="18" y="68" class="mobile-meta">Updated ${escapeXml(formatShortDate(new Date(repository.pushedAt)))}</text>
+    </g>`;
+  })
+  .join("");
+
+const mobileSvg = `<svg xmlns="http://www.w3.org/2000/svg" width="420" height="1160" viewBox="0 0 420 1160" role="img" aria-labelledby="title desc">
+<title id="title">${escapeXml(username)} mobile GitHub engineering snapshot</title>
+<desc id="desc">A mobile-optimized view of GitHub activity metrics, contribution rhythm, language mix, latest public activity, and featured repositories.</desc>
+<defs>
+  <linearGradient id="mobile-background" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#0b1220"/><stop offset=".58" stop-color="#111a2c"/><stop offset="1" stop-color="#0d1728"/></linearGradient>
+  <linearGradient id="mobile-accent" x1="0" y1="0" x2="1" y2="0"><stop stop-color="#89a5ff"/><stop offset=".55" stop-color="#b4c1f3"/><stop offset="1" stop-color="#79cfc3"/></linearGradient>
+  <radialGradient id="mobile-glow" cx="50%" cy="50%" r="50%"><stop stop-color="#8da5f2" stop-opacity=".13"/><stop offset="1" stop-color="#8da5f2" stop-opacity="0"/></radialGradient>
+  <clipPath id="mobile-frame"><rect width="420" height="1160" rx="20"/></clipPath>
+  <style>
+    text{font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}.mobile-heading{fill:#f5f7ff;font-size:19px;font-weight:700}.mobile-updated{fill:#8393b2;font-size:9.5px}.mobile-label,.mobile-section{fill:#9aa9c6;font-size:10px;font-weight:680;letter-spacing:.9px}.mobile-value{fill:#f5f7ff;font-size:23px;font-weight:720}.mobile-detail{fill:#9aa9c6;font-size:10.5px}.mobile-month{fill:#7787a5;font-size:9px}.mobile-note{fill:#8191ae;font-size:9.5px}.mobile-language{fill:#dfe7f8;font-size:11.5px;font-weight:680}.mobile-share{fill:#96a6c4;font-size:10px}.mobile-current{fill:#f1f5ff;font-size:13px;font-weight:700}.mobile-repo{fill:#edf2ff;font-size:13px;font-weight:680}.mobile-status{fill:#8797b5;font-size:8.5px;font-weight:680;letter-spacing:.55px}.mobile-impact{fill:#aab7cf;font-size:10.5px}.mobile-meta{fill:#8090ad;font-size:9.5px}.mobile-footer{fill:#7484a2;font-size:9.5px}
+  </style>
+</defs>
+<g clip-path="url(#mobile-frame)">
+  <rect width="420" height="1160" fill="url(#mobile-background)"/>
+  <circle cx="390" cy="15" r="130" fill="url(#mobile-glow)"/>
+  <path d="M0 1H420" stroke="url(#mobile-accent)" stroke-opacity=".72"/>
+  <text x="18" y="34" class="mobile-heading">Engineering snapshot</text>
+  <text x="402" y="25" text-anchor="end" class="mobile-updated">Updated ${escapeXml(formatDate(now))}</text>
+  <text x="402" y="40" text-anchor="end" class="mobile-updated">Automated daily</text>
+
+  ${mobileStatCards}
+
+  <rect x="18" y="300" width="384" height="155" rx="15" fill="#fff" fill-opacity=".024" stroke="#dbe5ff" stroke-opacity=".09"/>
+  <text x="34" y="326" class="mobile-section">CONTRIBUTION RHYTHM · 12 MONTHS</text>
+  ${mobileMonthLabels.join("")}
+  ${mobileHeatmap}
+  <text x="34" y="438" class="mobile-note">${formatNumber(metrics.publicContributions)} public · ${formatNumber(metrics.privateContributions)} private aggregate · ${formatNumber(metrics.pullRequests)} PRs · ${formatNumber(metrics.reviews)} reviews</text>
+
+  <rect x="18" y="470" width="384" height="248" rx="15" fill="#fff" fill-opacity=".024" stroke="#dbe5ff" stroke-opacity=".09"/>
+  <text x="34" y="496" class="mobile-section">SELECTED WORK · LANGUAGE MIX</text>
+  ${mobileLanguageBars}
+
+  ${mobileCurrentWork}
+
+  <text x="18" y="846" class="mobile-section">FEATURED PUBLIC WORK</text>
+  ${mobileFeaturedCards}
+
+  <text x="18" y="1143" class="mobile-footer">Member since ${escapeXml(memberSince)} · ${formatNumber(metrics.followers)} followers</text>
+  <text x="402" y="1143" text-anchor="end" class="mobile-footer">profile.hzi.io.vn</text>
+</g>
+</svg>\n`;
+
+await Promise.all([
+  mkdir(dirname(outputPath), { recursive: true }),
+  mkdir(dirname(mobileOutputPath), { recursive: true }),
+]);
+await Promise.all([
+  writeFile(outputPath, svg, "utf8"),
+  writeFile(mobileOutputPath, mobileSvg, "utf8"),
+]);
+console.log(`Updated ${outputPath} and ${mobileOutputPath} for ${username}.`);

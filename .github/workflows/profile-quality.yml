@@ -34,6 +34,31 @@ jobs:
       - name: Parse SVG assets
         run: python3 -c "import pathlib, xml.etree.ElementTree as ET; paths=list(pathlib.Path('assets').rglob('*.svg')); [ET.parse(path) for path in paths]; print(f'Validated {len(paths)} SVG assets.')"
 
+      - name: Validate SVG accessibility metadata
+        run: |
+          python3 - <<'PY'
+          import pathlib
+          import xml.etree.ElementTree as ET
+
+          namespace = "{http://www.w3.org/2000/svg}"
+          paths = list(pathlib.Path("assets").rglob("*.svg"))
+
+          for path in paths:
+              root = ET.parse(path).getroot()
+              assert root.get("role") == "img", f"Missing role=img: {path}"
+              assert root.get("aria-label") or root.get("aria-labelledby"), f"Missing accessible name: {path}"
+
+              if path.name.startswith("profile-"):
+                  labelled_by = (root.get("aria-labelledby") or "").split()
+                  ids = {element.get("id") for element in root.iter() if element.get("id")}
+                  assert {"title", "desc"}.issubset(ids), f"Missing title/desc: {path}"
+                  assert {"title", "desc"}.issubset(labelled_by), f"aria-labelledby must reference title and desc: {path}"
+                  assert (root.find(f"{namespace}title").text or "").strip(), f"Empty title: {path}"
+                  assert (root.find(f"{namespace}desc").text or "").strip(), f"Empty description: {path}"
+
+          print(f"Validated accessibility metadata for {len(paths)} SVG assets.")
+          PY
+
       - name: Validate README asset references
         run: |
           python3 -c "import pathlib,re; readme=pathlib.Path('README.md').read_text(encoding='utf-8'); refs=re.findall(r'(?:src|srcset)=\"(\./assets/[^\" ]+)', readme); missing=[ref for ref in refs if not pathlib.Path(ref.removeprefix('./')).is_file()]; assert refs, 'No local profile assets referenced'; assert not missing, f'Missing README assets: {missing}'; assert 'safepack' not in readme.lower(), 'Excluded repository found in README'; print(f'Validated {len(refs)} local README asset references.')"
@@ -43,4 +68,5 @@ jobs:
           test -f README.md
           test -f assets/profile-header.svg
           test -f assets/profile-metrics.svg
+          test -f assets/profile-metrics-mobile.svg
           test -f assets/profile-footer.svg

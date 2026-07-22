@@ -24,9 +24,9 @@
       <rect width="1200" height="170" rx="22"/>
     </clipPath>
     <style>
-      .message { font: 650 19px Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; letter-spacing: .2px; }
-      .meta { font: 500 11px Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; letter-spacing: 1.25px; }
-      .url { font: 600 12px Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
+      .message { font: 680 21px Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; letter-spacing: .15px; }
+      .meta { font: 560 12px Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; letter-spacing: 1.15px; }
+      .url { font: 650 13px Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; letter-spacing: .15px; }
       .sweep { animation: sweep 7s ease-in-out infinite; }
       .orbit { transform-origin: 1035px 84px; animation: orbit 18s linear infinite; }
       .pulse-a { animation: pulse 3.4s ease-in-out infinite; }
@@ -62,7 +62,7 @@
     <circle cx="61" cy="63" r="4" fill="#89a5ff" class="pulse-a"/>
     <text x="77" y="68" fill="#8e9dbb" class="meta">KANZUWAKAZAKI · SOFTWARE ENGINEERING</text>
     <text x="59" y="105" fill="#f3f6ff" class="message">Build with intent. Ship with evidence.</text>
-    <text x="59" y="132" fill="#7888a7" class="url">profile.hzi.io.vn</text>
+    <text x="59" y="132" fill="#93a5c8" class="url">VIEW CASE STUDIES · profile.hzi.io.vn →</text>
 
     <rect x="59" y="149" width="460" height="1.5" rx=".75" fill="#ffffff" fill-opacity=".08"/>
     <g class="sweep">
