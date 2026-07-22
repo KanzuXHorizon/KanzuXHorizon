@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" role="img" aria-label="Systems">
+  <style>.i{fill:none;stroke:#44516f;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}.a{stroke:#6079ca}@media(prefers-color-scheme:dark){.i{stroke:#c8d4ee}.a{stroke:#91a8f5}}</style>
+  <rect class="i a" x="4" y="4" width="6" height="6" rx="1.5"/>
+  <rect class="i" x="14" y="4" width="6" height="6" rx="1.5"/>
+  <rect class="i" x="9" y="14" width="6" height="6" rx="1.5"/>
+  <path class="i" d="M7 10v2h10v-2M12 12v2" opacity=".72"/>
+</svg>

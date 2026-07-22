@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" role="img" aria-label="Selected work">
+  <style>.i{fill:none;stroke:#44516f;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}.a{stroke:#6079ca}@media(prefers-color-scheme:dark){.i{stroke:#c8d4ee}.a{stroke:#91a8f5}}</style>
+  <path class="i" d="M3.5 7.2h6l1.8 2h9.2v8.9a2 2 0 0 1-2 2h-13a2 2 0 0 1-2-2V7.2Z"/>
+  <path class="i a" d="m12 11.5 1.1 2.2 2.4.3-1.7 1.7.4 2.4-2.2-1.1-2.2 1.1.4-2.4L8.5 14l2.4-.3 1.1-2.2Z"/>
+  <path class="i" d="M3.5 7.2V5.8a2 2 0 0 1 2-2h3.4l1.8 2h7.8a2 2 0 0 1 2 2v1.4" opacity=".55"/>
+</svg>

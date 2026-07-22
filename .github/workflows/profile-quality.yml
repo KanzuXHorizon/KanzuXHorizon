@@ -32,7 +32,7 @@ jobs:
         run: node --check scripts/generate-profile-metrics.mjs
 
       - name: Parse SVG assets
-        run: python3 -c "import xml.etree.ElementTree as ET; [ET.parse(path) for path in ('assets/profile-header.svg', 'assets/profile-metrics.svg', 'assets/profile-footer.svg')]; print('SVG assets are valid XML.')"
+        run: python3 -c "import pathlib, xml.etree.ElementTree as ET; paths=list(pathlib.Path('assets').rglob('*.svg')); [ET.parse(path) for path in paths]; print(f'Validated {len(paths)} SVG assets.')"
 
       - name: Validate README asset references
         run: |
