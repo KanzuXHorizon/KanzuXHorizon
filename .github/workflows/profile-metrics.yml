@@ -1,0 +1,51 @@
+name: Refresh profile metrics
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "17 2 * * *"
+  push:
+    branches:
+      - main
+    paths:
+      - scripts/generate-profile-metrics.mjs
+      - .github/workflows/profile-metrics.yml
+
+permissions:
+  contents: write
+
+concurrency:
+  group: profile-metrics
+  cancel-in-progress: true
+
+jobs:
+  refresh:
+    name: Generate public GitHub snapshot
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+
+    steps:
+      - name: Check out profile repository
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - name: Generate profile metrics SVG
+        env:
+          GH_TOKEN: ${{ secrets.PROFILE_GITHUB_TOKEN || github.token }}
+          PROFILE_USERNAME: ${{ github.repository_owner }}
+          PROFILE_PRIVATE_REPOSITORIES: ${{ vars.PROFILE_PRIVATE_REPOSITORIES || '21' }}
+          PROFILE_PRIVATE_TOKEN_CONFIGURED: ${{ secrets.PROFILE_GITHUB_TOKEN != '' }}
+        run: node scripts/generate-profile-metrics.mjs
+
+      - name: Commit refreshed metrics
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add assets/profile-metrics.svg
+
+          if git diff --cached --quiet; then
+            echo "Profile metrics are already current."
+            exit 0
+          fi
+
+          git commit -m "chore(profile): refresh public metrics [skip ci]"
+          git push

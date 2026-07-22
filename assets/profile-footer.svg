@@ -1,0 +1,83 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="170" viewBox="0 0 1200 170" role="img" aria-labelledby="title desc">
+  <title id="title">KanzuWakazaki profile footer</title>
+  <desc id="desc">A refined animated footer with engineering message and portfolio address.</desc>
+  <defs>
+    <linearGradient id="background" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#0b1220"/>
+      <stop offset="0.58" stop-color="#111a2d"/>
+      <stop offset="1" stop-color="#0d1728"/>
+    </linearGradient>
+    <linearGradient id="accent" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#89a5ff" stop-opacity="0"/>
+      <stop offset="0.46" stop-color="#b8c6ff" stop-opacity="0.9"/>
+      <stop offset="0.68" stop-color="#7dd3c7" stop-opacity="0.85"/>
+      <stop offset="1" stop-color="#7dd3c7" stop-opacity="0"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="50%" cy="50%" r="50%">
+      <stop offset="0" stop-color="#93a9ee" stop-opacity="0.13"/>
+      <stop offset="1" stop-color="#93a9ee" stop-opacity="0"/>
+    </radialGradient>
+    <filter id="softBlur" x="-100%" y="-100%" width="300%" height="300%">
+      <feGaussianBlur stdDeviation="8"/>
+    </filter>
+    <clipPath id="frame">
+      <rect width="1200" height="170" rx="22"/>
+    </clipPath>
+    <style>
+      .message { font: 650 19px Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; letter-spacing: .2px; }
+      .meta { font: 500 11px Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; letter-spacing: 1.25px; }
+      .url { font: 600 12px Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
+      .sweep { animation: sweep 7s ease-in-out infinite; }
+      .orbit { transform-origin: 1035px 84px; animation: orbit 18s linear infinite; }
+      .pulse-a { animation: pulse 3.4s ease-in-out infinite; }
+      .pulse-b { animation: pulse 3.4s 1.1s ease-in-out infinite; }
+      @keyframes sweep {
+        0%, 18% { transform: translateX(-420px); opacity: 0; }
+        38%, 62% { opacity: 1; }
+        84%, 100% { transform: translateX(420px); opacity: 0; }
+      }
+      @keyframes orbit {
+        to { transform: rotate(360deg); }
+      }
+      @keyframes pulse {
+        0%, 100% { opacity: .42; }
+        50% { opacity: 1; }
+      }
+      @media (prefers-reduced-motion: reduce) {
+        .sweep, .orbit, .pulse-a, .pulse-b { animation: none !important; }
+      }
+    </style>
+  </defs>
+
+  <g clip-path="url(#frame)">
+    <rect width="1200" height="170" fill="url(#background)"/>
+    <circle cx="1035" cy="84" r="185" fill="url(#glow)"/>
+    <path d="M0 1H1200" stroke="url(#accent)" stroke-opacity=".72"/>
+
+    <g opacity=".08">
+      <path d="M0 56H1200M0 114H1200" stroke="#dce5ff"/>
+      <path d="M170 0V170M430 0V170M690 0V170M950 0V170" stroke="#dce5ff"/>
+    </g>
+
+    <circle cx="61" cy="63" r="4" fill="#89a5ff" class="pulse-a"/>
+    <text x="77" y="68" fill="#8e9dbb" class="meta">KANZUWAKAZAKI · SOFTWARE ENGINEERING</text>
+    <text x="59" y="105" fill="#f3f6ff" class="message">Build with intent. Ship with evidence.</text>
+    <text x="59" y="132" fill="#7888a7" class="url">profile.hzi.io.vn</text>
+
+    <rect x="59" y="149" width="460" height="1.5" rx=".75" fill="#ffffff" fill-opacity=".08"/>
+    <g class="sweep">
+      <rect x="59" y="146" width="220" height="7" rx="3.5" fill="url(#accent)" opacity=".35" filter="url(#softBlur)"/>
+      <rect x="59" y="149" width="220" height="1.5" rx=".75" fill="url(#accent)"/>
+    </g>
+
+    <g class="orbit" opacity=".72">
+      <circle cx="1035" cy="84" r="47" fill="none" stroke="#b8c6ff" stroke-opacity=".19"/>
+      <circle cx="1082" cy="84" r="4" fill="#89a5ff" class="pulse-b"/>
+      <circle cx="995" cy="109" r="3" fill="#7dd3c7"/>
+    </g>
+    <circle cx="1035" cy="84" r="26" fill="#ffffff" fill-opacity=".035" stroke="#ffffff" stroke-opacity=".12"/>
+    <path d="M1024 84h22M1035 73v22" stroke="url(#accent)" stroke-width="2" stroke-linecap="round"/>
+
+    <text x="1139" y="136" text-anchor="end" fill="#667694" class="meta">VIETNAM · UTC+7</text>
+  </g>
+</svg>

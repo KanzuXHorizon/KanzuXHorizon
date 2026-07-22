@@ -1,0 +1,46 @@
+name: Validate profile assets
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+    paths:
+      - README.md
+      - assets/**
+      - scripts/**
+      - .github/workflows/**
+
+permissions:
+  contents: read
+
+concurrency:
+  group: profile-quality-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  validate:
+    name: Validate README and generated assets
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+
+    steps:
+      - name: Check out profile repository
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - name: Check metrics generator syntax
+        run: node --check scripts/generate-profile-metrics.mjs
+
+      - name: Parse SVG assets
+        run: python3 -c "import xml.etree.ElementTree as ET; [ET.parse(path) for path in ('assets/profile-header.svg', 'assets/profile-metrics.svg', 'assets/profile-footer.svg')]; print('SVG assets are valid XML.')"
+
+      - name: Validate README asset references
+        run: |
+          python3 -c "import pathlib,re; readme=pathlib.Path('README.md').read_text(encoding='utf-8'); refs=re.findall(r'(?:src|srcset)=\"(\./assets/[^\" ]+)', readme); missing=[ref for ref in refs if not pathlib.Path(ref.removeprefix('./')).is_file()]; assert refs, 'No local profile assets referenced'; assert not missing, f'Missing README assets: {missing}'; assert 'safepack' not in readme.lower(), 'Excluded repository found in README'; print(f'Validated {len(refs)} local README asset references.')"
+
+      - name: Confirm required profile assets exist
+        run: |
+          test -f README.md
+          test -f assets/profile-header.svg
+          test -f assets/profile-metrics.svg
+          test -f assets/profile-footer.svg
