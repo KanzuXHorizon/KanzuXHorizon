@@ -316,16 +316,23 @@ for (let weekIndex = 0; weekIndex < weeks.length; weekIndex += 1) {
   );
 }
 
+const desktopLanguageStartY = 276;
+const desktopLanguageGap = 36;
+const desktopLanguageTrackWidth = 312;
+const desktopLanguageNoteY = 456;
 const languageBars = topLanguages
   .map((language, index) => {
-    const y = 275 + index * 39;
+    const y = desktopLanguageStartY + index * desktopLanguageGap;
     const percentage = (language.size / languageSizeTotal) * 100;
-    const width = Math.max(12, (percentage / 100) * 312);
+    const width = Math.max(
+      12,
+      (percentage / 100) * desktopLanguageTrackWidth,
+    );
     return `<g transform="translate(798 ${y})">
       <circle cx="4" cy="-4" r="4" fill="${escapeXml(language.color)}"/>
       <text x="18" y="0" class="language-name">${escapeXml(language.name)}</text>
       <text x="330" y="0" text-anchor="end" class="language-share">${formatNumber(percentage, 1)}%</text>
-      <rect x="18" y="12" width="312" height="5" rx="2.5" fill="#fff" fill-opacity=".055"/>
+      <rect x="18" y="12" width="${desktopLanguageTrackWidth}" height="5" rx="2.5" fill="#fff" fill-opacity=".055"/>
       <rect x="18" y="12" width="${width.toFixed(1)}" height="5" rx="2.5" fill="${escapeXml(language.color)}" fill-opacity=".88"/>
     </g>`;
   })
@@ -391,7 +398,7 @@ const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="760" v
   <radialGradient id="glow" cx="50%" cy="50%" r="50%"><stop stop-color="#8da5f2" stop-opacity=".12"/><stop offset="1" stop-color="#8da5f2" stop-opacity="0"/></radialGradient>
   <clipPath id="frame"><rect width="1200" height="760" rx="22"/></clipPath>
   <style>
-    text{font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}.heading{fill:#f5f7ff;font-size:24px;font-weight:680}.updated{fill:#8393b2;font-size:11.5px}.metric-label,.section-label{fill:#9aa9c6;font-size:11px;font-weight:680;letter-spacing:1.15px}.metric-value{fill:#f5f7ff;font-size:29px;font-weight:720}.metric-detail{fill:#98a8c5;font-size:11.5px}.metric-note{fill:#7687a6;font-size:10.5px}.month-label,.axis-label{fill:#7787a5;font-size:10px}.panel-note{fill:#8191ae;font-size:11px}.language-name{fill:#dfe7f8;font-size:12px;font-weight:680}.language-share{fill:#96a6c4;font-size:11px}.repo-name{fill:#edf2ff;font-size:14.5px;font-weight:680}.repo-status{fill:#8797b5;font-size:9.5px;font-weight:680;letter-spacing:.72px}.repo-impact{fill:#aab7cf;font-size:12px}.repo-updated{fill:#8090ad;font-size:11px}.current-name{fill:#f1f5ff;font-size:16px;font-weight:720}.current-detail{fill:#a0aec8;font-size:12px}.current-sha{fill:#8191ae;font-size:11px;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}.footer{fill:#7484a2;font-size:11px}.reveal{opacity:1;animation:reveal .65s ease both}.card-1{animation-delay:40ms}.card-2{animation-delay:100ms}.card-3{animation-delay:160ms}.card-4{animation-delay:220ms}.project-1{animation-delay:260ms}.project-2{animation-delay:320ms}.project-3{animation-delay:380ms}.accent-line{animation:breathe 4.8s ease-in-out infinite}.heat-peak{animation:peak 3.2s ease-in-out infinite}.activity-dot{animation:activityPulse 2.8s ease-in-out infinite}@keyframes reveal{from{opacity:.84}to{opacity:1}}@keyframes breathe{0%,100%{opacity:.42}50%{opacity:.88}}@keyframes peak{0%,100%{opacity:.82}50%{opacity:1}}@keyframes activityPulse{0%,100%{opacity:.62}50%{opacity:1}}@media(prefers-reduced-motion:reduce){.reveal,.accent-line,.heat-peak,.activity-dot{animation:none!important;opacity:1}}
+    text{font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}.heading{fill:#f5f7ff;font-size:24px;font-weight:680}.updated{fill:#8393b2;font-size:11.5px}.metric-label,.section-label{fill:#9aa9c6;font-size:11px;font-weight:680;letter-spacing:1.15px}.section-meta{fill:#7f91b3;font-size:9.5px;font-weight:700;letter-spacing:.75px}.metric-value{fill:#f5f7ff;font-size:29px;font-weight:720}.metric-detail{fill:#98a8c5;font-size:11.5px}.metric-note{fill:#7687a6;font-size:10.5px}.month-label,.axis-label{fill:#7787a5;font-size:10px}.panel-note{fill:#8191ae;font-size:11px}.language-note{fill:#7688a8;font-size:10.5px}.language-name{fill:#dfe7f8;font-size:12px;font-weight:680}.language-share{fill:#96a6c4;font-size:11px}.repo-name{fill:#edf2ff;font-size:14.5px;font-weight:680}.repo-status{fill:#8797b5;font-size:9.5px;font-weight:680;letter-spacing:.72px}.repo-impact{fill:#aab7cf;font-size:12px}.repo-updated{fill:#8090ad;font-size:11px}.current-name{fill:#f1f5ff;font-size:16px;font-weight:720}.current-detail{fill:#a0aec8;font-size:12px}.current-sha{fill:#8191ae;font-size:11px;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}.footer{fill:#7484a2;font-size:11px}.reveal{opacity:1;animation:reveal .65s ease both}.card-1{animation-delay:40ms}.card-2{animation-delay:100ms}.card-3{animation-delay:160ms}.card-4{animation-delay:220ms}.project-1{animation-delay:260ms}.project-2{animation-delay:320ms}.project-3{animation-delay:380ms}.accent-line{animation:breathe 4.8s ease-in-out infinite}.heat-peak{animation:peak 3.2s ease-in-out infinite}.activity-dot{animation:activityPulse 2.8s ease-in-out infinite}@keyframes reveal{from{opacity:.84}to{opacity:1}}@keyframes breathe{0%,100%{opacity:.42}50%{opacity:.88}}@keyframes peak{0%,100%{opacity:.82}50%{opacity:1}}@keyframes activityPulse{0%,100%{opacity:.62}50%{opacity:1}}@media(prefers-reduced-motion:reduce){.reveal,.accent-line,.heat-peak,.activity-dot{animation:none!important;opacity:1}}
   </style>
 </defs>
 <g clip-path="url(#frame)">
@@ -407,7 +414,9 @@ const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="760" v
   <rect x="42" y="214" width="716" height="250" rx="17" fill="#fff" fill-opacity=".024" stroke="#dbe5ff" stroke-opacity=".09"/>
   <rect x="774" y="214" width="384" height="250" rx="17" fill="#fff" fill-opacity=".024" stroke="#dbe5ff" stroke-opacity=".09"/>
   <text x="62" y="242" class="section-label">CONTRIBUTION RHYTHM · LAST 12 MONTHS</text>
-  <text x="1138" y="242" text-anchor="end" class="section-label">SELECTED WORK · LANGUAGE MIX</text>
+  <text x="798" y="242" class="section-label">SELECTED WORK · LANGUAGE MIX</text>
+  <rect x="1050" y="226" width="88" height="22" rx="11" fill="#8da5f2" fill-opacity=".07" stroke="#9eb0e8" stroke-opacity=".13"/>
+  <text x="1094" y="241" text-anchor="middle" class="section-meta">TOP ${topLanguages.length} · ${featuredRepositories.length} REPOS</text>
 
   ${monthLabels.join("")}
   <text x="49" y="299" class="axis-label">M</text>
@@ -429,7 +438,7 @@ const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="760" v
   <text x="62" y="438" class="panel-note">Intensity is calculated from GitHub's daily contribution counts. Private repository details are never requested or rendered.</text>
 
   ${languageBars}
-  <text x="798" y="443" class="panel-note">Aggregated from the public languages in the three featured repositories below.</text>
+  <text x="798" y="${desktopLanguageNoteY}" class="language-note">Public language totals across ${featuredRepositories.length} featured repositories.</text>
 
   ${currentWorkMarkup}
 
@@ -510,16 +519,22 @@ for (let weekIndex = 0; weekIndex < weeks.length; weekIndex += 1) {
   );
 }
 
+const mobileLanguageStartY = 526;
+const mobileLanguageGap = 35;
+const mobileLanguageTrackWidth = 344;
 const mobileLanguageBars = topLanguages
   .map((language, index) => {
-    const y = 526 + index * 38;
+    const y = mobileLanguageStartY + index * mobileLanguageGap;
     const percentage = (language.size / languageSizeTotal) * 100;
-    const width = Math.max(10, (percentage / 100) * 344);
+    const width = Math.max(
+      10,
+      (percentage / 100) * mobileLanguageTrackWidth,
+    );
     return `<g>
       <circle cx="38" cy="${y - 4}" r="3.5" fill="${escapeXml(language.color)}"/>
       <text x="49" y="${y}" class="mobile-language">${escapeXml(language.name)}</text>
       <text x="382" y="${y}" text-anchor="end" class="mobile-share">${formatNumber(percentage, 1)}%</text>
-      <rect x="38" y="${y + 11}" width="344" height="5" rx="2.5" fill="#fff" fill-opacity=".055"/>
+      <rect x="38" y="${y + 11}" width="${mobileLanguageTrackWidth}" height="5" rx="2.5" fill="#fff" fill-opacity=".055"/>
       <rect x="38" y="${y + 11}" width="${width.toFixed(1)}" height="5" rx="2.5" fill="${escapeXml(language.color)}" fill-opacity=".9"/>
     </g>`;
   })
@@ -560,7 +575,7 @@ const mobileSvg = `<svg xmlns="http://www.w3.org/2000/svg" width="420" height="1
   <radialGradient id="mobile-glow" cx="50%" cy="50%" r="50%"><stop stop-color="#8da5f2" stop-opacity=".13"/><stop offset="1" stop-color="#8da5f2" stop-opacity="0"/></radialGradient>
   <clipPath id="mobile-frame"><rect width="420" height="1160" rx="20"/></clipPath>
   <style>
-    text{font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}.mobile-heading{fill:#f5f7ff;font-size:19px;font-weight:700}.mobile-updated{fill:#8393b2;font-size:9.5px}.mobile-label,.mobile-section{fill:#9aa9c6;font-size:10px;font-weight:680;letter-spacing:.9px}.mobile-value{fill:#f5f7ff;font-size:23px;font-weight:720}.mobile-detail{fill:#9aa9c6;font-size:10.5px}.mobile-month{fill:#7787a5;font-size:9px}.mobile-note{fill:#8191ae;font-size:9.5px}.mobile-language{fill:#dfe7f8;font-size:11.5px;font-weight:680}.mobile-share{fill:#96a6c4;font-size:10px}.mobile-current{fill:#f1f5ff;font-size:13px;font-weight:700}.mobile-repo{fill:#edf2ff;font-size:13px;font-weight:680}.mobile-status{fill:#8797b5;font-size:8.5px;font-weight:680;letter-spacing:.55px}.mobile-impact{fill:#aab7cf;font-size:10.5px}.mobile-meta{fill:#8090ad;font-size:9.5px}.mobile-footer{fill:#7484a2;font-size:9.5px}
+    text{font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}.mobile-heading{fill:#f5f7ff;font-size:19px;font-weight:700}.mobile-updated{fill:#8393b2;font-size:9.5px}.mobile-label,.mobile-section{fill:#9aa9c6;font-size:10px;font-weight:680;letter-spacing:.9px}.mobile-value{fill:#f5f7ff;font-size:23px;font-weight:720}.mobile-detail{fill:#9aa9c6;font-size:10.5px}.mobile-month{fill:#7787a5;font-size:9px}.mobile-axis{fill:#6f809f;font-size:8.5px}.mobile-note{fill:#8191ae;font-size:9.5px}.mobile-language-note{fill:#7486a5;font-size:9.2px}.mobile-language{fill:#dfe7f8;font-size:11.5px;font-weight:680}.mobile-share{fill:#96a6c4;font-size:10px}.mobile-current{fill:#f1f5ff;font-size:13px;font-weight:700}.mobile-repo{fill:#edf2ff;font-size:13px;font-weight:680}.mobile-status{fill:#8797b5;font-size:8.5px;font-weight:680;letter-spacing:.55px}.mobile-impact{fill:#aab7cf;font-size:10.5px}.mobile-meta{fill:#8090ad;font-size:9.5px}.mobile-footer{fill:#7484a2;font-size:9.5px}
   </style>
 </defs>
 <g clip-path="url(#mobile-frame)">
@@ -576,12 +591,17 @@ const mobileSvg = `<svg xmlns="http://www.w3.org/2000/svg" width="420" height="1
   <rect x="18" y="300" width="384" height="155" rx="15" fill="#fff" fill-opacity=".024" stroke="#dbe5ff" stroke-opacity=".09"/>
   <text x="34" y="326" class="mobile-section">CONTRIBUTION RHYTHM · 12 MONTHS</text>
   ${mobileMonthLabels.join("")}
+  <text x="28" y="376" text-anchor="end" class="mobile-axis">M</text>
+  <text x="28" y="389" text-anchor="end" class="mobile-axis">W</text>
+  <text x="28" y="402" text-anchor="end" class="mobile-axis">F</text>
   ${mobileHeatmap}
-  <text x="34" y="438" class="mobile-note">${formatNumber(metrics.publicContributions)} public · ${formatNumber(metrics.privateContributions)} private aggregate · ${formatNumber(metrics.pullRequests)} PRs · ${formatNumber(metrics.reviews)} reviews</text>
+  <text x="34" y="432" class="mobile-note">${formatNumber(metrics.publicContributions)} public · ${formatNumber(metrics.privateContributions)} private aggregate</text>
+  <text x="34" y="447" class="mobile-note">${formatNumber(metrics.pullRequests)} PRs · ${formatNumber(metrics.reviews)} reviews · ${formatNumber(metrics.issues)} issues</text>
 
   <rect x="18" y="470" width="384" height="248" rx="15" fill="#fff" fill-opacity=".024" stroke="#dbe5ff" stroke-opacity=".09"/>
   <text x="34" y="496" class="mobile-section">SELECTED WORK · LANGUAGE MIX</text>
   ${mobileLanguageBars}
+  <text x="38" y="705" class="mobile-language-note">Public language totals across ${featuredRepositories.length} featured repositories.</text>
 
   ${mobileCurrentWork}
 
