@@ -8,38 +8,48 @@ on:
     branches:
       - main
     paths:
+      - package.json
       - scripts/generate-profile-metrics.mjs
+      - scripts/lib/profile-data.mjs
       - .github/workflows/profile-metrics.yml
 
-permissions:
-  contents: write
+permissions: {}
 
 concurrency:
-  group: profile-metrics
+  group: profile-metrics-${{ github.ref }}
   cancel-in-progress: true
 
 jobs:
   refresh:
-    name: Generate public GitHub snapshot
+    name: Generate GitHub snapshot
     runs-on: ubuntu-latest
     timeout-minutes: 5
+    permissions:
+      contents: write
 
     steps:
       - name: Check out profile repository
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
 
-      - name: Generate profile metrics SVG
-        env:
-          GH_TOKEN: ${{ secrets.PROFILE_GITHUB_TOKEN || github.token }}
-          PROFILE_USERNAME: ${{ github.repository_owner }}
-          PROFILE_PRIVATE_REPOSITORIES: ${{ vars.PROFILE_PRIVATE_REPOSITORIES || '21' }}
-          PROFILE_PRIVATE_TOKEN_CONFIGURED: ${{ secrets.PROFILE_GITHUB_TOKEN != '' }}
-        run: node scripts/generate-profile-metrics.mjs
+      - name: Set up Node.js
+        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: 24
 
-      - name: Commit refreshed metrics
+      - name: Run generator checks
+        run: npm run check
+
+      - name: Generate profile metrics
+        env:
+          GH_TOKEN: ${{ github.token }}
+          PROFILE_USERNAME: ${{ github.repository_owner }}
+          PROFILE_FEATURED_REPOSITORIES: ${{ vars.PROFILE_FEATURED_REPOSITORIES }}
+        run: npm run generate:profile
+
+      - name: Commit changed metrics
+        shell: bash
         run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          set -euo pipefail
           git add assets/profile-metrics.svg assets/profile-metrics-mobile.svg
 
           if git diff --cached --quiet; then
@@ -47,5 +57,7 @@ jobs:
             exit 0
           fi
 
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git commit -m "chore(profile): refresh public metrics [skip ci]"
           git push

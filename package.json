@@ -1,0 +1,14 @@
+{
+  "name": "kanzuxhorizon-profile",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "generate:profile": "node scripts/generate-profile-metrics.mjs",
+    "check:syntax": "node --check scripts/lib/profile-data.mjs && node --check scripts/generate-profile-metrics.mjs",
+    "test": "node --test",
+    "check": "npm run check:syntax && npm test"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}

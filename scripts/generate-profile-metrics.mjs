@@ -1,12 +1,32 @@
-import { execFileSync } from "node:child_process";
 import { mkdir, writeFile } from "node:fs/promises";
 import { dirname, resolve } from "node:path";
 
-const username =
-  process.env.PROFILE_USERNAME ||
-  process.env.GITHUB_REPOSITORY_OWNER ||
-  process.env.GITHUB_REPOSITORY?.split("/")[0] ||
-  "KanzuXHorizon";
+import {
+  buildProfileSnapshot,
+  createContributionRange,
+  fetchProfileUser,
+  parseRepositoryNames,
+  resolveSnapshotDate,
+  resolveUsername,
+} from "./lib/profile-data.mjs";
+
+const username = resolveUsername();
+const now = resolveSnapshotDate();
+const { from, to } = createContributionRange(now);
+const user = fetchProfileUser({ username, from, to });
+const preferredRepositoryNames = parseRepositoryNames(
+  process.env.PROFILE_FEATURED_REPOSITORIES,
+);
+const {
+  featuredRepositories,
+  currentPublicRepository,
+  topLanguages,
+  weeks,
+  metrics,
+} = buildProfileSnapshot(user, {
+  username,
+  preferredRepositoryNames,
+});
 const outputPath = resolve(
   process.env.PROFILE_METRICS_OUTPUT || "assets/profile-metrics.svg",
 );
@@ -14,193 +34,6 @@ const mobileOutputPath = resolve(
   process.env.PROFILE_METRICS_MOBILE_OUTPUT ||
     "assets/profile-metrics-mobile.svg",
 );
-const now = new Date();
-const to = now.toISOString();
-const fromDate = new Date(now);
-fromDate.setUTCDate(fromDate.getUTCDate() - 364);
-fromDate.setUTCHours(0, 0, 0, 0);
-const from = fromDate.toISOString();
-
-const featuredRepositoryNames = [
-  "HRS-code-public",
-  "folderverse-3d",
-  "Fca-Horizon-Remastered",
-];
-const currentPublicRepositoryNames = [
-  "Global_Horizon",
-  "HRS-code-public",
-  "folderverse-3d",
-];
-const configuredPrivateRepositories = Number.parseInt(
-  process.env.PROFILE_PRIVATE_REPOSITORIES || "0",
-  10,
-);
-const privateRepositoryAccessConfigured =
-  process.env.PROFILE_PRIVATE_TOKEN_CONFIGURED !== "false";
-
-const query = `query($login:String!,$from:DateTime!,$to:DateTime!){
-  user(login:$login){
-    createdAt
-    followers{totalCount}
-    publicRepositories:repositories(privacy:PUBLIC,ownerAffiliations:OWNER){totalCount}
-    privateRepositories:repositories(privacy:PRIVATE,ownerAffiliations:OWNER){totalCount}
-    contributionsCollection(from:$from,to:$to){
-      contributionCalendar{
-        totalContributions
-        weeks{contributionDays{date contributionCount weekday}}
-      }
-      restrictedContributionsCount
-      totalCommitContributions
-      totalIssueContributions
-      totalPullRequestContributions
-      totalPullRequestReviewContributions
-    }
-    repositories(first:100,privacy:PUBLIC,ownerAffiliations:OWNER,orderBy:{field:PUSHED_AT,direction:DESC}){
-      nodes{
-        name
-        isFork
-        isArchived
-        stargazerCount
-        forkCount
-        pushedAt
-        primaryLanguage{name color}
-        languages(first:10,orderBy:{field:SIZE,direction:DESC}){
-          edges{size node{name color}}
-        }
-        defaultBranchRef{
-          name
-          target{
-            ... on Commit{
-              history{totalCount}
-              committedDate
-              oid
-            }
-          }
-        }
-      }
-    }
-  }
-}`;
-
-const raw = execFileSync(
-  "gh",
-  [
-    "api",
-    "graphql",
-    "-f",
-    `query=${query}`,
-    "-F",
-    `login=${username}`,
-    "-F",
-    `from=${from}`,
-    "-F",
-    `to=${to}`,
-  ],
-  { encoding: "utf8", maxBuffer: 12 * 1024 * 1024 },
-);
-
-const user = JSON.parse(raw)?.data?.user;
-if (!user) throw new Error(`GitHub user not found: ${username}`);
-
-const repositories = (user.repositories?.nodes || []).filter(
-  (repository) =>
-    repository && !repository.isFork && repository.name !== username,
-);
-const featuredRepositories = featuredRepositoryNames
-  .map((name) => repositories.find((repository) => repository.name === name))
-  .filter(Boolean);
-const currentPublicRepository = repositories
-  .filter(
-    (repository) =>
-      !repository.isArchived &&
-      currentPublicRepositoryNames.includes(repository.name) &&
-      repository.defaultBranchRef?.target,
-  )
-  .sort((a, b) => new Date(b.pushedAt) - new Date(a.pushedAt))[0];
-const contributions = user.contributionsCollection || {};
-const calendar = contributions.contributionCalendar || {};
-const weeks = calendar.weeks || [];
-const days = weeks
-  .flatMap((week) => week.contributionDays || [])
-  .sort((a, b) => a.date.localeCompare(b.date));
-
-const totalContributions = calendar.totalContributions || 0;
-const privateContributions = contributions.restrictedContributionsCount || 0;
-const publicContributions = Math.max(
-  0,
-  totalContributions - privateContributions,
-);
-const activeDays = days.filter((day) => day.contributionCount > 0).length;
-const averagePerWeek = totalContributions / Math.max(1, weeks.length);
-const busiestDay = days.reduce(
-  (best, day) =>
-    day.contributionCount > (best?.contributionCount || 0) ? day : best,
-  null,
-);
-
-let longestStreak = 0;
-let currentRun = 0;
-let previousActiveDate = null;
-for (const day of days) {
-  if (day.contributionCount <= 0) continue;
-
-  const currentDate = new Date(`${day.date}T00:00:00Z`);
-  const gap = previousActiveDate
-    ? Math.round((currentDate - previousActiveDate) / 86_400_000)
-    : null;
-  currentRun = gap === 1 ? currentRun + 1 : 1;
-  longestStreak = Math.max(longestStreak, currentRun);
-  previousActiveDate = currentDate;
-}
-
-const metrics = {
-  contributions: totalContributions,
-  commits: contributions.totalCommitContributions || 0,
-  publicProjects: repositories.length,
-  publicRepositories: user.publicRepositories?.totalCount ?? repositories.length,
-  privateRepositories: privateRepositoryAccessConfigured
-    ? (user.privateRepositories?.totalCount ?? 0)
-    : Number.isFinite(configuredPrivateRepositories)
-      ? Math.max(0, configuredPrivateRepositories)
-      : 0,
-  stars: repositories.reduce(
-    (sum, repository) => sum + repository.stargazerCount,
-    0,
-  ),
-  forks: repositories.reduce(
-    (sum, repository) => sum + repository.forkCount,
-    0,
-  ),
-  followers: user.followers?.totalCount || 0,
-  pullRequests: contributions.totalPullRequestContributions || 0,
-  reviews: contributions.totalPullRequestReviewContributions || 0,
-  issues: contributions.totalIssueContributions || 0,
-  privateContributions,
-  publicContributions,
-  activeDays,
-  averagePerWeek,
-  longestStreak,
-  busiestDay,
-};
-
-const languageTotals = new Map();
-for (const repository of featuredRepositories) {
-  for (const edge of repository.languages?.edges || []) {
-    const name = edge?.node?.name;
-    const size = edge?.size || 0;
-    if (!name || size <= 0) continue;
-    const existing = languageTotals.get(name) || {
-      name,
-      color: edge.node.color || "#94a3b8",
-      size: 0,
-    };
-    existing.size += size;
-    languageTotals.set(name, existing);
-  }
-}
-const topLanguages = [...languageTotals.values()]
-  .sort((a, b) => b.size - a.size)
-  .slice(0, 5);
 const languageSizeTotal = Math.max(
   1,
   topLanguages.reduce((sum, language) => sum + language.size, 0),
@@ -262,9 +95,9 @@ const statCards = [
   ],
   [
     "REPOSITORIES",
-    `${formatNumber(metrics.publicRepositories + metrics.privateRepositories)} repositories`,
-    `${formatNumber(metrics.publicRepositories)} public · ${formatNumber(metrics.privateRepositories)} private`,
-    `${formatNumber(metrics.publicProjects)} projects · ★${formatNumber(metrics.stars)} · forks ${formatNumber(metrics.forks)}`,
+    `${formatNumber(metrics.publicRepositories)} public`,
+    `${formatNumber(metrics.publicProjects)} original projects`,
+    `★${formatNumber(metrics.stars)} · forks ${formatNumber(metrics.forks)}`,
   ],
 ]
   .map(([label, value, detail, note], index) => {
@@ -356,21 +189,6 @@ const featuredCards = featuredRepositories
   })
   .join("");
 
-const formatRelativeAge = (value) => {
-  const days = Math.max(
-    0,
-    Math.floor((now - new Date(value)) / 86_400_000),
-  );
-  if (days === 0) return "today";
-  if (days === 1) return "1 day ago";
-  if (days < 30) return `${days} days ago`;
-  const months = Math.floor(days / 30);
-  if (months === 1) return "1 month ago";
-  if (months < 12) return `${months} months ago`;
-  const years = Math.floor(months / 12);
-  return years === 1 ? "1 year ago" : `${years} years ago`;
-};
-
 const currentTarget = currentPublicRepository?.defaultBranchRef?.target;
 const currentWorkMarkup = currentPublicRepository
   ? `<rect x="42" y="487" width="1116" height="82" rx="17" fill="#fff" fill-opacity=".028" stroke="#dbe5ff" stroke-opacity=".10"/>
@@ -378,7 +196,7 @@ const currentWorkMarkup = currentPublicRepository
   <circle cx="66" cy="541" r="5" fill="${escapeXml(currentPublicRepository.primaryLanguage?.color || "#94a3b8")}" class="activity-dot"/>
   <text x="82" y="546" class="current-name">${escapeXml(currentPublicRepository.name)}</text>
   <text x="350" y="546" class="current-detail">${formatNumber(currentTarget?.history?.totalCount || 0)} commits on ${escapeXml(currentPublicRepository.defaultBranchRef?.name || "default branch")}</text>
-  <text x="690" y="546" class="current-detail">Last commit ${escapeXml(formatDate(new Date(currentTarget?.committedDate || currentPublicRepository.pushedAt)))} · ${escapeXml(formatRelativeAge(currentTarget?.committedDate || currentPublicRepository.pushedAt))}</text>
+  <text x="690" y="546" class="current-detail">Last commit ${escapeXml(formatDate(new Date(currentTarget?.committedDate || currentPublicRepository.pushedAt)))}</text>
   <text x="1138" y="546" text-anchor="end" class="current-sha">${escapeXml((currentTarget?.oid || "").slice(0, 7))}</text>
   <path d="M62 558H1138" stroke="#dbe5ff" stroke-opacity=".08"/>`
   : "";
@@ -406,8 +224,8 @@ const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="760" v
   <circle cx="1120" cy="25" r="210" fill="url(#glow)"/>
   <path d="M0 1H1200" stroke="url(#accent)" stroke-opacity=".72" class="accent-line"/>
   <text x="42" y="46" class="heading">Engineering snapshot</text>
-  <text x="1158" y="34" text-anchor="end" class="updated">Updated ${escapeXml(formatDate(now))}</text>
-  <text x="1158" y="50" text-anchor="end" class="updated">GitHub GraphQL · automated daily</text>
+  <text x="1158" y="34" text-anchor="end" class="updated">Rolling 12-month data</text>
+  <text x="1158" y="50" text-anchor="end" class="updated">GitHub GraphQL · refreshed daily</text>
 
   ${statCards}
 
@@ -471,8 +289,8 @@ const mobileStatCards = [
   ],
   [
     "REPOSITORIES",
-    `${formatNumber(metrics.publicRepositories + metrics.privateRepositories)} total`,
-    `${formatNumber(metrics.publicRepositories)} public · ${formatNumber(metrics.privateRepositories)} private`,
+    `${formatNumber(metrics.publicRepositories)} public`,
+    `★${formatNumber(metrics.stars)} · forks ${formatNumber(metrics.forks)}`,
   ],
 ]
   .map(([label, value, detail], index) => {
@@ -545,7 +363,7 @@ const mobileCurrentWork = currentPublicRepository
   <text x="34" y="760" class="mobile-section">LATEST PUBLIC ACTIVITY</text>
   <circle cx="38" cy="786" r="4" fill="${escapeXml(currentPublicRepository.primaryLanguage?.color || "#94a3b8")}"/>
   <text x="50" y="790" class="mobile-current">${escapeXml(truncate(currentPublicRepository.name, 24))}</text>
-  <text x="386" y="790" text-anchor="end" class="mobile-detail">${formatNumber(currentTarget?.history?.totalCount || 0)} commits · ${escapeXml(formatRelativeAge(currentTarget?.committedDate || currentPublicRepository.pushedAt))}</text>
+  <text x="386" y="790" text-anchor="end" class="mobile-detail">${formatNumber(currentTarget?.history?.totalCount || 0)} commits</text>
   <text x="34" y="806" class="mobile-meta">Last commit ${escapeXml(formatDate(new Date(currentTarget?.committedDate || currentPublicRepository.pushedAt)))} · ${escapeXml((currentTarget?.oid || "").slice(0, 7))}</text>`
   : "";
 
@@ -583,8 +401,8 @@ const mobileSvg = `<svg xmlns="http://www.w3.org/2000/svg" width="420" height="1
   <circle cx="390" cy="15" r="130" fill="url(#mobile-glow)"/>
   <path d="M0 1H420" stroke="url(#mobile-accent)" stroke-opacity=".72"/>
   <text x="18" y="34" class="mobile-heading">Engineering snapshot</text>
-  <text x="402" y="25" text-anchor="end" class="mobile-updated">Updated ${escapeXml(formatDate(now))}</text>
-  <text x="402" y="40" text-anchor="end" class="mobile-updated">Automated daily</text>
+  <text x="402" y="25" text-anchor="end" class="mobile-updated">Rolling 12 months</text>
+  <text x="402" y="40" text-anchor="end" class="mobile-updated">Refreshed daily</text>
 
   ${mobileStatCards}
 
