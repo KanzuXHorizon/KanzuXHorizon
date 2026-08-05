@@ -58,7 +58,7 @@ def validate_readme() -> None:
 
     required_sections = (
         "engineering-focus",
-        "selected-work",
+        "engineering-toolkit",
         "engineering-snapshot",
         "connect",
     )
@@ -66,6 +66,8 @@ def validate_readme() -> None:
         if f'id="{section}"' not in content:
             fail(f"Missing README section anchor: {section}")
 
+    if "selected-work" in content or "Selected work" in content:
+        fail("Removed Selected work section found in README")
     if "safepack" in content.lower():
         fail("Excluded repository found in README")
     if "img.shields.io/github/" in content:

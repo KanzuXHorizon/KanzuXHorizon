@@ -17,7 +17,7 @@
 
 <p align="center">
   <a href="#engineering-focus">Focus</a> ·
-  <a href="#selected-work">Work</a> ·
+  <a href="#engineering-toolkit">Toolkit</a> ·
   <a href="#engineering-snapshot">Snapshot</a> ·
   <a href="#connect">Connect</a>
 </p>
@@ -32,31 +32,7 @@ I am **Nguyễn Thái Hảo**, also known as **KanzuWakazaki**. I design and shi
 - <img src="./assets/icons/systems.svg" width="17" height="17" align="absmiddle" alt="" /> **Backend platforms** — APIs, service boundaries, reliability, security, and operational visibility.
 - <img src="./assets/icons/product.svg" width="17" height="17" align="absmiddle" alt="" /> **Product engineering** — accessible interfaces, measurable workflows, focused testing, and maintainable delivery.
 
-<a id="selected-work"></a>
-
-## <img src="./assets/icons/projects.svg" width="22" height="22" align="absmiddle" alt="" /> Selected work
-
-<table>
-  <tr>
-    <td width="50%" valign="top">
-      <h3><a href="https://profile.hzi.io.vn/">Technical Portfolio <img src="./assets/icons/external-link.svg" width="14" height="14" alt="" /></a></h3>
-      <p>Production case studies covering ownership, architecture, constraints, verification, and outcomes.</p>
-      <p><code>Next.js</code> <code>TypeScript</code> <code>React</code> <code>Playwright</code></p>
-    </td>
-    <td width="50%" valign="top">
-      <h3><a href="https://github.com/KanzuXHorizon/HRS-code-public">Workforce Intelligence Platform <img src="./assets/icons/external-link.svg" width="14" height="14" alt="" /></a></h3>
-      <p>Attendance, verification, agent orchestration, and command-center operations in one workforce platform.</p>
-      <p><code>.NET</code> <code>React</code> <code>Python</code> <code>Redis</code></p>
-    </td>
-  </tr>
-  <tr>
-    <td colspan="2" valign="top">
-      <h3><a href="https://github.com/KanzuXHorizon/folderverse-3d">Folderverse 3D <img src="./assets/icons/external-link.svg" width="14" height="14" alt="" /></a></h3>
-      <p>A GPU-accelerated 3D file-system explorer for large hierarchies, with clustering, level of detail, search, previews, and keyboard navigation.</p>
-      <p><code>Next.js</code> <code>TypeScript</code> <code>React Three Fiber</code> <code>Three.js</code></p>
-    </td>
-  </tr>
-</table>
+<a id="engineering-toolkit"></a>
 
 ## <img src="./assets/icons/toolkit.svg" width="22" height="22" align="absmiddle" alt="" /> Toolkit
 
