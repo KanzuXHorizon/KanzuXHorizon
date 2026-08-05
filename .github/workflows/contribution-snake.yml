@@ -10,18 +10,19 @@ on:
     paths:
       - .github/workflows/contribution-snake.yml
 
-permissions:
-  contents: write
+permissions: {}
 
 concurrency:
-  group: contribution-snake
+  group: contribution-snake-${{ github.ref }}
   cancel-in-progress: true
 
 jobs:
   generate:
-    name: Generate contribution snake
+    name: Generate contribution SVGs
     runs-on: ubuntu-latest
-    timeout-minutes: 10
+    timeout-minutes: 8
+    permissions:
+      contents: read
 
     steps:
       - name: Generate light and dark SVGs
@@ -32,10 +33,49 @@ jobs:
             dist/github-contribution-grid-snake.svg?color_snake=#6f89d8&color_dots=#ebedf0,#c8d4f4,#9fb3ea,#738ed8,#4f69b8
             dist/github-contribution-grid-snake-dark.svg?palette=github-dark&color_snake=#b8c6ff&color_dots=#161b22,#26365c,#40558d,#6379bd,#91a6ea
 
-      - name: Publish generated assets
-        uses: crazy-max/ghaction-github-pages@1d6ee9b181a81033a16bd707a1401afa978daab4 # v5.0.0
+      - name: Upload generated SVGs
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         with:
-          target_branch: output
-          build_dir: dist
-        env:
-          GITHUB_TOKEN: ${{ github.token }}
+          name: contribution-snake
+          path: dist/*.svg
+          if-no-files-found: error
+          retention-days: 1
+
+  publish:
+    name: Publish contribution SVGs
+    needs: generate
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions:
+      contents: write
+
+    steps:
+      - name: Check out output branch
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: output
+          path: published
+
+      - name: Download generated SVGs
+        uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8.0.1
+        with:
+          name: contribution-snake
+          path: dist
+
+      - name: Publish changed SVGs
+        shell: bash
+        run: |
+          set -euo pipefail
+          install -m 0644 dist/*.svg published/
+          cd published
+          git add github-contribution-grid-snake.svg github-contribution-grid-snake-dark.svg
+
+          if git diff --cached --quiet; then
+            echo "Contribution SVGs are already current."
+            exit 0
+          fi
+
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git commit -m "chore(profile): refresh contribution animation"
+          git push

@@ -1,15 +1,18 @@
-name: Validate profile assets
+name: Validate profile
 
 on:
+  workflow_dispatch:
   pull_request:
   push:
     branches:
       - main
     paths:
       - README.md
+      - package.json
       - assets/**
       - scripts/**
-      - .github/workflows/**
+      - tests/**
+      - .github/**
 
 permissions:
   contents: read
@@ -20,53 +23,32 @@ concurrency:
 
 jobs:
   validate:
-    name: Validate README and generated assets
+    name: Test generator and profile assets
     runs-on: ubuntu-latest
     timeout-minutes: 5
 
     steps:
       - name: Check out profile repository
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
 
-      - name: Check metrics generator syntax
-        run: node --check scripts/generate-profile-metrics.mjs
+      - name: Set up Node.js
+        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: 24
 
-      - name: Parse SVG assets
-        run: python3 -c "import pathlib, xml.etree.ElementTree as ET; paths=list(pathlib.Path('assets').rglob('*.svg')); [ET.parse(path) for path in paths]; print(f'Validated {len(paths)} SVG assets.')"
+      - name: Run generator checks
+        run: npm run check
 
-      - name: Validate SVG accessibility metadata
-        run: |
-          python3 - <<'PY'
-          import pathlib
-          import xml.etree.ElementTree as ET
+      - name: Generate a live profile preview
+        env:
+          GH_TOKEN: ${{ github.token }}
+          PROFILE_USERNAME: ${{ github.repository_owner }}
+          PROFILE_FEATURED_REPOSITORIES: ${{ vars.PROFILE_FEATURED_REPOSITORIES }}
+          PROFILE_METRICS_OUTPUT: ${{ runner.temp }}/profile-assets/profile-metrics.svg
+          PROFILE_METRICS_MOBILE_OUTPUT: ${{ runner.temp }}/profile-assets/profile-metrics-mobile.svg
+        run: npm run generate:profile
 
-          namespace = "{http://www.w3.org/2000/svg}"
-          paths = list(pathlib.Path("assets").rglob("*.svg"))
-
-          for path in paths:
-              root = ET.parse(path).getroot()
-              assert root.get("role") == "img", f"Missing role=img: {path}"
-              assert root.get("aria-label") or root.get("aria-labelledby"), f"Missing accessible name: {path}"
-
-              if path.name.startswith("profile-"):
-                  labelled_by = (root.get("aria-labelledby") or "").split()
-                  ids = {element.get("id") for element in root.iter() if element.get("id")}
-                  assert {"title", "desc"}.issubset(ids), f"Missing title/desc: {path}"
-                  assert {"title", "desc"}.issubset(labelled_by), f"aria-labelledby must reference title and desc: {path}"
-                  assert (root.find(f"{namespace}title").text or "").strip(), f"Empty title: {path}"
-                  assert (root.find(f"{namespace}desc").text or "").strip(), f"Empty description: {path}"
-
-          print(f"Validated accessibility metadata for {len(paths)} SVG assets.")
-          PY
-
-      - name: Validate README asset references
-        run: |
-          python3 -c "import pathlib,re; readme=pathlib.Path('README.md').read_text(encoding='utf-8'); refs=re.findall(r'(?:src|srcset)=\"(\./assets/[^\" ]+)', readme); missing=[ref for ref in refs if not pathlib.Path(ref.removeprefix('./')).is_file()]; assert refs, 'No local profile assets referenced'; assert not missing, f'Missing README assets: {missing}'; assert 'safepack' not in readme.lower(), 'Excluded repository found in README'; print(f'Validated {len(refs)} local README asset references.')"
-
-      - name: Confirm required profile assets exist
-        run: |
-          test -f README.md
-          test -f assets/profile-header.svg
-          test -f assets/profile-metrics.svg
-          test -f assets/profile-metrics-mobile.svg
-          test -f assets/profile-footer.svg
+      - name: Validate README and SVG assets
+        run: python3 scripts/validate-profile.py --generated-dir "${{ runner.temp }}/profile-assets"

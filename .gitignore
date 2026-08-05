@@ -1,1 +1,6 @@
 .playwright-cli/
+node_modules/
+.env
+.env.*
+!.env.example
+Start-DevSpace-MCP-Cloudflared.ps1
